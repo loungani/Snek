@@ -47,13 +47,12 @@ class Snake
 			{
 				this.tail = 5;
 			}
-    		}
-    		this.trail.push({x:this.px,y:this.py});
-    		while(this.trail.length>this.tail) 
-		{
-		
-    			this.trail.shift();
-    		}
+    	}
+		this.trail.push({x:this.px,y:this.py});
+		while(this.trail.length>this.tail) 
+		{	
+			this.trail.shift();
+		}
  
 	}
 	setVx(vx)
@@ -133,75 +132,74 @@ function keyPush0(evt)
 
 	newTime0 = Date.now();
 
-	if (newTime0 - oldTime0 > TICK_RATE / 1.25)
-	{		
-		switch(evt.keyCode)
-		{
-			case 65:
-				if (snakes[0].getVx() != 1) 
-				{
-         				snakes[0].setVx(-1); snakes[0].setVy(0);
-				}
-				break;
-			case 87:
-				if (snakes[0].getVy() != 1) 
-				{
-					snakes[0].setVx(0); snakes[0].setVy(-1);
-				}
- 				break;
-			case 68:
-				if (snakes[0].getVx() != -1) 
-				{
-					snakes[0].setVx(1); snakes[0].setVy(0);
-				}
-				break;
-			case 83:
-				if (snakes[0].getVy() != -1) 
-				{
-					snakes[0].setVx(0); snakes[0].setVy(1);
-				}
-				break;		
-		}
+	switch(evt.keyCode)
+	{
+		case 65:
+			if (snakes[0].getVx() != 1 && newTime0 - oldTime0 > TICK_RATE / 1.25) 
+			{
+					snakes[0].setVx(-1); snakes[0].setVy(0);
+					oldTime0 = Date.now();
+			}
+			break;
+		case 87:
+			if (snakes[0].getVy() != 1 && newTime0 - oldTime0 > TICK_RATE / 1.25) 
+			{
+				snakes[0].setVx(0); snakes[0].setVy(-1);
+				oldTime0 = Date.now();
+			}
+			break;
+		case 68:
+			if (snakes[0].getVx() != -1 && newTime0 - oldTime0 > TICK_RATE / 1.25) 
+			{
+				snakes[0].setVx(1); snakes[0].setVy(0);
+				oldTime0 = Date.now();
+			}
+			break;
+		case 83:
+			if (snakes[0].getVy() != -1 && newTime0 - oldTime0 > TICK_RATE / 1.25) 
+			{
+				snakes[0].setVx(0); snakes[0].setVy(1);
+				oldTime0 = Date.now();
+			}
+			break;		
 	}
-
-	oldTime0 = Date.now();
+	
 }
 function keyPush1(evt)
 {
 
 	newTime1 = Date.now();
-
-	if (newTime1 - oldTime1 > TICK_RATE / 1.5)
-	{		
-		switch(evt.keyCode)
-		{
-			case 37:
-				if (snakes[1].getVx() != 1) 
-				{
-         				snakes[1].setVx(-1); snakes[1].setVy(0);
-				}
-				break;
-			case 38:
-				if (snakes[1].getVy() != 1) 
-				{
-					snakes[1].setVx(0); snakes[1].setVy(-1);
-				}
- 				break;
-			case 39:
-				if (snakes[1].getVx() != -1) 
-				{
-					snakes[1].setVx(1); snakes[1].setVy(0);
-				}
-				break;
-			case 40:
-				if (snakes[1].getVy() != -1) 
-				{
-					snakes[1].setVx(0); snakes[1].setVy(1);
-				}
-				break;		
-		}
+		
+	switch(evt.keyCode)
+	{
+		case 37:
+			if (snakes[1].getVx() != 1 && newTime1 - oldTime1 > TICK_RATE / 1.5) 
+			{
+					snakes[1].setVx(-1); snakes[1].setVy(0);
+					oldTime1 = Date.now();
+			}
+			break;
+		case 38:
+			if (snakes[1].getVy() != 1 && newTime1 - oldTime1 > TICK_RATE / 1.5) 
+			{
+				snakes[1].setVx(0); snakes[1].setVy(-1);
+				oldTime1 = Date.now();
+			}
+			break;
+		case 39:
+			if (snakes[1].getVx() != -1 && newTime1 - oldTime1 > TICK_RATE / 1.5) 
+			{
+				snakes[1].setVx(1); snakes[1].setVy(0);
+				oldTime1 = Date.now();
+			}
+			break;
+		case 40:
+			if (snakes[1].getVy() != -1 && newTime1 - oldTime1 > TICK_RATE / 1.5) 
+			{
+				snakes[1].setVx(0); snakes[1].setVy(1);
+				oldTime1 = Date.now();
+			}
+			break;		
 	}
-
-	oldTime1 = Date.now();
 }
 </script>
