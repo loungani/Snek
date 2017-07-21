@@ -1,0 +1,207 @@
+<canvas id="gc" width="900" height="900"></canvas>
+<script>
+TICK_RATE = 1000/15;
+TC = 45;
+GS = 20;
+NUM_SNAKES = 2;
+
+class Snake
+{
+	constructor(px, py)
+	{
+		this.trail = [];
+		this.tail = 5;
+		this.vx = this.vy = 0;
+
+		this.px = px;
+		this.py = py;
+	}
+	move()
+	{
+		this.px += this.vx;
+		this.py += this.vy;
+
+		if(this.px < 0) 
+		{
+			this.px = TC-1;
+		}
+		if(this.px > TC-1) 
+		{
+			this.px = 0;
+  		}
+		if(this.py < 0) 
+		{
+			this.py = TC-1;
+		}
+		if(this.py > TC-1) 
+		{
+			this.py = 0;
+		}
+	}
+	draw()
+	{	
+		for(var i=0;i<this.trail.length;i++) 
+		{
+			ctx.fillRect(this.trail[i].x*GS, this.trail[i].y*GS, GS-2, GS-2);
+			if(this.trail[i].x == this.px && this.trail[i].y == this.py) 
+			{
+				this.tail = 5;
+			}
+    		}
+    		this.trail.push({x:this.px,y:this.py});
+    		while(this.trail.length>this.tail) 
+		{
+		
+    			this.trail.shift();
+    		}
+ 
+	}
+	setVx(vx)
+	{
+		this.vx = vx;
+	}
+	setVy(vy)
+	{
+		this.vy = vy;
+	}
+	setPx(px)
+	{
+		this.px = px;
+	}
+	setPy(py)
+	{
+		this.py = py;
+	}
+	getPx()
+	{
+		return this.px;
+	}
+	getPy()
+	{
+		return this.py;
+	}	
+	getVx()
+	{
+		return this.vx;
+	}
+	getVy()
+	{
+		return this.vy;
+	}	
+}
+
+window.onload=function() 
+{
+	canv = document.getElementById("gc");
+	ctx = canv.getContext("2d");
+	document.addEventListener("keydown", keyPush0);
+	document.addEventListener("keydown", keyPush1);
+	
+	snakes = [NUM_SNAKES];
+	for (var i = 0; i < NUM_SNAKES; i++)
+	{
+		snakes[i] = new Snake((i+1) * 15, (i+1) * 15);
+	}
+
+	colors = [NUM_SNAKES];
+	colors[0] = "cyan";
+	colors[1] = "lime";
+
+	oldTime0 = Date.now();
+	oldTime1 = Date.now();
+
+	setInterval(game, TICK_RATE);
+}
+
+function game()
+{
+	ctx.fillStyle = "black";
+	ctx.fillRect(0, 0, canv.width, canv.height);
+
+	for (var i = 0; i < NUM_SNAKES; i++)
+	{
+		snakes[i].move();
+		ctx.fillStyle = colors[i];
+		
+		snakes[i].draw();
+	}
+	ctx.fillStyle="white";
+
+}
+function keyPush0(evt)
+{
+
+	newTime0 = Date.now();
+
+	if (newTime0 - oldTime0 > TICK_RATE / 1.25)
+	{		
+		switch(evt.keyCode)
+		{
+			case 65:
+				if (snakes[0].getVx() != 1) 
+				{
+         				snakes[0].setVx(-1); snakes[0].setVy(0);
+				}
+				break;
+			case 87:
+				if (snakes[0].getVy() != 1) 
+				{
+					snakes[0].setVx(0); snakes[0].setVy(-1);
+				}
+ 				break;
+			case 68:
+				if (snakes[0].getVx() != -1) 
+				{
+					snakes[0].setVx(1); snakes[0].setVy(0);
+				}
+				break;
+			case 83:
+				if (snakes[0].getVy() != -1) 
+				{
+					snakes[0].setVx(0); snakes[0].setVy(1);
+				}
+				break;		
+		}
+	}
+
+	oldTime0 = Date.now();
+}
+function keyPush1(evt)
+{
+
+	newTime1 = Date.now();
+
+	if (newTime1 - oldTime1 > TICK_RATE / 1.5)
+	{		
+		switch(evt.keyCode)
+		{
+			case 37:
+				if (snakes[1].getVx() != 1) 
+				{
+         				snakes[1].setVx(-1); snakes[1].setVy(0);
+				}
+				break;
+			case 38:
+				if (snakes[1].getVy() != 1) 
+				{
+					snakes[1].setVx(0); snakes[1].setVy(-1);
+				}
+ 				break;
+			case 39:
+				if (snakes[1].getVx() != -1) 
+				{
+					snakes[1].setVx(1); snakes[1].setVy(0);
+				}
+				break;
+			case 40:
+				if (snakes[1].getVy() != -1) 
+				{
+					snakes[1].setVx(0); snakes[1].setVy(1);
+				}
+				break;		
+		}
+	}
+
+	oldTime1 = Date.now();
+}
+</script>
