@@ -89,6 +89,31 @@ class Snake
 	}	
 }
 
+class Apple
+{
+	constructor(px, py)
+	{
+		this.px = px;
+		this.py = py;
+	}
+	setPx(px)
+	{
+		this.px = px;
+	}
+	setPy(py)
+	{
+		this.py = py;
+	}
+	getPx()
+	{
+		return this.px;
+	}
+	getPy()
+	{
+		return this.py;
+	}
+}
+
 window.onload=function() 
 {
 	canv = document.getElementById("gc");
