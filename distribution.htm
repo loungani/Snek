@@ -20,6 +20,14 @@ window.onload=function()
 
 	}
 }
+
+function gaussian(mean, stddev) {
+	theta = 2 * math.PI * Math.random();
+	rho = Math.sqrt(-2.0*Math.log(1-Math.random()));
+	scale = stddev * rho;
+	x = mean + scale * Math.cos(theta);
+	return x;
+}
 </script>
 
 
