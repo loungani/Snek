@@ -4,23 +4,28 @@ TICK_RATE = 1000/15;
 TC = 45;
 GS = 20;
 NUM_SNAKES = 2;
+NUM_APPLES = 3;
+
 
 class Snake
 {
 	constructor(px, py)
 	{
+		this.isAlive = true;
 		this.trail = [];
 		this.tail = 5;
-		this.vx = this.vy = 0;
+		this.vx = this.vy = 1;
 
 		this.px = px;
 		this.py = py;
 	}
 	move()
 	{
-		this.px += this.vx;
-		this.py += this.vy;
-
+		if (this.isAlive)
+		{
+			this.px += this.vx;
+			this.py += this.vy;
+		}
 		if(this.px < 0) 
 		{
 			this.px = TC-1;
@@ -38,14 +43,37 @@ class Snake
 			this.py = 0;
 		}
 	}
+	checkCollision(eSnake)
+	{
+		var eTrail = eSnake.getTrail();		
+
+		if (this.px == eSnake.getPx() && this.py == eSnake.getPy())
+		{
+			this.vx = 0;
+			this.vy = 0;
+			this.isAlive = false;
+		}
+		
+		for (var i = 0; i < eTrail.length; i++)
+		{
+			if (this.px == eTrail[i].x && this.py == eTrail[i].y)
+			{
+				this.vx = 0;
+				this.vy = 0;
+				this.isAlive = false;
+			}
+		}
+	}
 	draw()
 	{	
-		for(var i=0;i<this.trail.length;i++) 
+		for (var i = 0; i < this.trail.length; i++) 
 		{
 			ctx.fillRect(this.trail[i].x*GS, this.trail[i].y*GS, GS-2, GS-2);
 			if(this.trail[i].x == this.px && this.trail[i].y == this.py) 
 			{
-				this.tail = 5;
+				this.vx = 0;
+				this.vy = 0;
+				this.isAlive = false;
 			}
     	}
 		this.trail.push({x:this.px,y:this.py});
@@ -54,6 +82,10 @@ class Snake
 			this.trail.shift();
 		}
  
+	}
+	grow()
+	{
+		this.tail++;
 	}
 	setVx(vx)
 	{
@@ -86,7 +118,11 @@ class Snake
 	getVy()
 	{
 		return this.vy;
-	}	
+	}
+	getTrail()
+	{
+		return this.trail;
+	}
 }
 
 class Apple
@@ -95,6 +131,18 @@ class Apple
 	{
 		this.px = px;
 		this.py = py;
+	}
+	draw()
+	{
+		ctx.fillRect(this.px*GS, this.py*GS, GS-2, GS-2)
+	}
+	checkOverlap(apple)
+	{
+		if (this.px == apple.getPx() && this.py == apple.getPy())
+		{
+			return true;
+		}
+		return false;
 	}
 	setPx(px)
 	{
@@ -121,6 +169,11 @@ window.onload=function()
 	document.addEventListener("keydown", keyPush0);
 	document.addEventListener("keydown", keyPush1);
 	
+	reset();
+	setInterval(game, TICK_RATE);
+}
+function reset()
+{
 	snakes = [NUM_SNAKES];
 	for (var i = 0; i < NUM_SNAKES; i++)
 	{
@@ -128,19 +181,35 @@ window.onload=function()
 	}
 
 	colors = [NUM_SNAKES];
-	colors[0] = "cyan";
-	colors[1] = "lime";
+	colors[0] = "lime";
+	colors[1] = "cyan";
+	
+	apples = [NUM_APPLES];
+	for (var i = 0; i < NUM_APPLES; i++)
+	{
+		apples[i] = new Apple(Math.floor(Math.random() * (TC-1)), Math.floor(Math.random() * (TC-1)));
+		for (var j = 0; j < i; j++)
+		{
+			if (apples[i].checkOverlap(apples[j]))
+			{
+				apples[i] = new Apple(Math.floor(Math.random() * (TC-1)), Math.floor(Math.random() * (TC-1)));
+			}
+		}
+	}
 
 	oldTime0 = Date.now();
 	oldTime1 = Date.now();
-
-	setInterval(game, TICK_RATE);
 }
-
 function game()
 {
 	ctx.fillStyle = "black";
 	ctx.fillRect(0, 0, canv.width, canv.height);
+	
+	ctx.fillStyle="red";
+	for (var i = 0; i < NUM_APPLES; i++)
+	{
+		apples[i].draw();
+	}
 
 	for (var i = 0; i < NUM_SNAKES; i++)
 	{
@@ -148,13 +217,30 @@ function game()
 		ctx.fillStyle = colors[i];
 		
 		snakes[i].draw();
+		
+		for (var j = 0; j < NUM_APPLES; j++)
+		{
+			if (snakes[i].getPx() == apples[j].getPx() && snakes[i].getPy() == apples[j].getPy())
+			{
+				snakes[i].grow(); 
+				apples[j] = new Apple(Math.floor(Math.random() * (TC-1)), Math.floor(Math.random() * (TC-1)));
+				for (var k = 0; k < NUM_APPLES; k++)
+				{
+					if (k != j && apples[j].checkOverlap(apples[k]))
+					{
+						apples[j] = new Apple(Math.floor(Math.random() * (TC-1)), Math.floor(Math.random() * (TC-1)));
+					}
+				}
+			}
+		}
 	}
-	ctx.fillStyle="white";
+	snakes[0].checkCollision(snakes[1]);
+	snakes[1].checkCollision(snakes[0]);
+
 
 }
 function keyPush0(evt)
 {
-
 	newTime0 = Date.now();
 
 	switch(evt.keyCode)
@@ -188,13 +274,12 @@ function keyPush0(evt)
 			}
 			break;		
 	}
-	
+
 }
 function keyPush1(evt)
 {
-
 	newTime1 = Date.now();
-		
+
 	switch(evt.keyCode)
 	{
 		case 37:

@@ -1,0 +1,25 @@
+<canvas id="gc" width="900" height="900"></canvas>
+<script>
+	
+gs=tc=30;
+
+window.onload=function() 
+{
+    canv=document.getElementById("gc");
+    ctx=canv.getContext("2d");
+	
+	for(var x = 0; x < gs; x++)
+	{
+		for(var y = 0; y < gs; y++)
+		{
+			if(Math.random() > .23) {ctx.fillStyle = "rgb(" + (Math.floor(250 + Math.random() * 5))  + ", " +  (Math.floor(237 + Math.random() * 10)) + ", " + 0 + ")";} //"rgb(255, 242, 0)";
+			else {ctx.fillStyle = "rgb(" + (Math.floor(248 + Math.random() * 5))  + ", " +  (Math.floor(196 + Math.random() * 10)) + ", " + (Math.floor(9 + Math.random() * 10)) + ")";} 			//"rgb(252, 201, 14)";
+			
+			ctx.fillRect(x*gs,y*gs,gs-2,gs-2);
+		}
+
+	}
+}
+</script>
+
+
